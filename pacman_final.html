@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    <title>Juego Pacman</title>
+		<link rel="stylesheet" href="pacman_final.css" >
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>		
+	</head>
+	<body>
+		<div id="pacman"></div>
+		<div id="pacman2"></div>
+		<div class="monito"></div>
+		<div class="puntajefin">
+			<h3>Jugador 1</h3>
+			<p class="fin">SCORE: <span id="puntajeText"></span></p>
+			<p class="fin">VIDAS: <span id="vidasText"></span></p>
+		</div>
+		<div class="puntajefin2">
+			<h3>Jugador 2</h3>
+			<p class="fin">SCORE: <span id="pacman2puntajeText"></span></p>
+			<p class="fin">VIDAS: <span id="pacman2vidasText"></span></p>
+		</div>
+		<div class="fantasma" id="fantasma"></div>
+		<div class="fantasma" id="fantasma2"></div>
+		<div id="gameboard"></div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+	<script type="text/javascript">	
+		$(document).ready(function(){
+		// etiqueta jquery pa poner el codigo desde aqui
+		var mundo = [
+			[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+			[2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+			[2,1,2,2,2,2,1,2,2,2,2,2,1,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,2,2,1,2,2,2,2,2,1,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,2,2,1,2,2,2,2,2,1,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+			[2,1,2,2,2,2,1,2,2,2,2,2,1,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,2,2,1,2,2,2,2,2,1,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,1,2],
+			[2,1,2,2,1,2,1,2,2,2,2,2,1,2,2,3,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,1,2,1,2,2,0,0,0,0,0,0,0,0,0,0,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,1,2,1,2,2,0,2,2,2,0,0,2,2,2,0,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,1,2,1,2,2,0,2,0,0,0,0,0,0,2,0,2,2,1,2,2,2,2,1,2],
+			[2,1,1,1,1,1,1,1,1,0,2,0,0,0,0,0,0,2,0,1,1,1,1,1,1,1,1,2],
+			[2,1,2,2,2,2,1,2,2,0,2,0,0,0,0,0,0,2,0,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,2,2,1,2,2,0,2,2,2,2,2,2,2,2,0,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,2,2,1,2,2,0,2,2,2,2,2,2,2,2,0,2,2,1,2,2,2,2,1,2],
+			[2,1,1,1,1,3,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2],
+			[2,1,2,2,2,2,1,2,2,2,2,2,1,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,2,2,2,2,1,2,2,2,2,2,1,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2],
+			[2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,1,2],
+			[2,1,2,2,2,2,1,2,2,1,2,2,1,2,1,2,2,2,1,2,2,1,2,2,1,2,1,2],
+			[2,1,2,2,2,2,1,2,2,1,2,2,1,2,1,2,2,2,1,2,2,1,2,2,1,2,1,2],
+			[2,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,2,2,1,1,3,1,1,1,2],
+			[2,1,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,1,2],
+			[2,1,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,1,2],
+			[2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+			[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+		];
+			function gameOver() {
+				if (vidas == 0 || vidas2 == 0) {
+					alert('Game over!');
+					mundo = [ //arreglar este mundo ta feo , y los monos quedan afuera
+						[2,2,2,2,2,2,2,2,2,2],
+						[2,1,1,2,1,1,1,3,1,2],
+						[2,1,1,2,1,1,1,1,1,2],
+						[2,1,1,1,1,1,1,1,1,2],
+						[2,1,1,1,3,2,2,1,1,2],
+						[2,1,1,1,1,1,2,1,1,2],
+						[2,1,2,1,1,1,1,1,1,2],
+						[2,1,2,1,1,1,1,1,1,2],
+						[2,1,2,1,1,1,1,1,1,2],
+						[2,2,2,2,2,2,2,2,2,2]
+					]; 
+					pacman.x = 1;
+					pacman.y = 1;
+					pacman2.x = 1;
+					pacman2.y = 8;
+					fantasma.x = 8;
+					fantasma.y = 7;
+					fantasma2.x = 6;
+					fantasma2.y= 6;
+					vidas = 3;
+					vidas2 = 3;
+					puntaje = 0;
+					puntaje2 = 0;
+					displaypuntaje();
+					displayPacman();
+					displaymundo();
+					displayfantasma();
+				}
+			}
+	
+			var juegoFun = true;
+			var puntaje = 0;
+			var puntaje2 = 0;
+			var vidas = 3;
+			var vidas2 = 3;
+	
+	
+			var pacman = {
+				x: 1,
+				y: 1
+			};
+	
+			var pacman2 = {
+				x: 26,
+				y: 1
+			};
+
+			var fantasma = {
+				x: 15,
+				y: 14
+			}
+
+			var fantasma2 = {
+				x: 14,
+				y: 15
+			}
+	
+			function displaymundo(){
+				var output = "";
+				for (var i = 0; i < mundo.length; i++) {
+					output += '<div class="row">\n'
+					for (var j = 0; j < mundo[i].length; j++) {
+						if(mundo[i][j] == 2 ) {
+							output += "<div class='muro'></div>";
+						} else if(mundo[i][j] == 1 ) {
+							output += "<div class='coin'></div>";
+						} else if(mundo[i][j] == 0 ) {
+							output += "<div class='vacio'></div>";
+						} else if(mundo[i][j] == 3 ) {
+							output += "<div class='cereza'></div>";
+						}				
+					}
+					output += "</div>\n"
+				}	
+				$('#gameboard').html(output);
+				//document.getElementById("gameboard").........
+			}
+	
+			document.onkeydown = function(e){
+				var pacX = pacman.x;
+				var pacY = pacman.y;
+	
+				var pacX2 = pacman2.x;
+				var pacY2 = pacman2.y;		
+	
+			
+				if(e.keyCode == 37) { 
+						pacman.x --;
+						$('#pacman').css('transform', 'rotate(180deg)');
+				}
+				else if(e.keyCode == 38) { //arr
+						pacman.y --;
+						$('#pacman').css('transform', 'rotate(270deg)');
+				}
+				else if(e.keyCode == 39) { 
+						pacman.x ++;
+						$('#pacman').css('transform', 'rotate(360deg)');
+				}
+				else if(e.keyCode == 40) { //abajo
+						pacman.y ++;
+						$('#pacman').css('transform', 'rotate(90deg)');
+				}
+				
+				if (mundo[pacman.y][pacman.x] === 2) {				
+					pacman.x = pacX;
+					pacman.y = pacY;				
+				}
+				if (pacman.y === pacman2.y && pacman.x === pacman2.x) {					
+					pacman.x = pacX;
+					pacman.y = pacY;					
+				}
+				if (mundo[pacman.y][pacman.x] === 1) {
+					mundo[pacman.y][pacman.x] = 0;
+					puntaje += 10;
+				}				
+				if (mundo[pacman.y][pacman.x] === 3) {
+					mundo[pacman.y][pacman.x] = 0;
+					puntaje += 30;
+				}
+				if ((pacman.y === fantasma.y && pacman.x === fantasma.x) || (fantasma.y === pacman.y && fantasma.x === pacman.x)) {
+					pacman.x = 1;
+					pacman.y = 1;
+					vidas--;
+					alert('Jugador 1: Haz perdido una vida');
+				}
+					//rotar pacman 2
+				if(e.keyCode == 65) { 
+						pacman2.x --;
+						$('#pacman2').css('transform', 'rotate(180deg)');
+				}
+				else if(e.keyCode == 87) { 
+						pacman2.y --;
+						$('#pacman2').css('transform', 'rotate(270deg)');
+				}
+				else if(e.keyCode == 68) { 
+						pacman2.x ++;
+						$('#pacman2').css('transform', 'rotateY(360deg)');
+				}
+				else if(e.keyCode == 83) {
+						pacman2.y ++;
+						$('#pacman2').css('transform', 'rotate(90deg)');
+				}
+				
+				if (mundo[pacman2.y][pacman2.x] === 2) { 			
+					pacman2.x = pacX2;
+					pacman2.y = pacY2;			
+				}
+				if (pacman2.y === pacman.y && pacman2.x === pacman.x) { 		
+					pacman2.x = pacX2;
+					pacman2.y = pacY2;				
+				}
+				if (mundo[pacman2.y][pacman2.x] === 1) {
+					mundo[pacman2.y][pacman2.x] = 0;
+					puntaje2 += 10;
+				}			
+				if (mundo[pacman2.y][pacman2.x] === 3) {
+					mundo[pacman2.y][pacman2.x] = 0;
+					puntaje2 += 30;
+				}			
+				if ((pacman2.y === fantasma.y && pacman2.x === fantasma.x) || (fantasma.y === pacman2.y && fantasma.x === pacman2.x)) {
+					pacman2.x = 1;
+					pacman2.y = 10;
+					vidas2--;
+					alert('Jugador 2: Haz perdido una vida');
+				}
+	
+				displaypuntaje();
+				if (juegoFun) {
+					displaymundo();
+					displayPacman();
+					displayfantasma();
+					gameOver();
+				}
+			}
+	
+			function displayPacman(){
+				document.getElementById('pacman').style.top = pacman.y*20+"px";
+				document.getElementById('pacman').style.left = pacman.x*20+"px";
+				document.getElementById('pacman2').style.top = pacman2.y*20+"px";
+				document.getElementById('pacman2').style.left = pacman2.x*20+"px";
+			}
+	
+			function displaypuntaje(){
+				$('#puntajeText').text(puntaje);
+				$('#vidasText').text(vidas);
+				$('#pacman2puntajeText').text(puntaje2);
+				$('#pacman2vidasText').text(vidas2);
+			}			
+	
+			function displayfantasma(){
+				document.getElementById('fantasma').style.top = fantasma.y*20+"px";
+				document.getElementById('fantasma').style.left = fantasma.x*20+"px";				
+			}
+			function displayfantasma2(){
+				document.getElementById('fantasma2').style.top = fantasma.y*20+"px";
+				document.getElementById('fantasma2').style.left = fantasma.x*20+"px";
+			}
+	
+			function moverfantasma() {			
+				var mover = Math.floor(Math.random());
+				setInterval(function () {					
+					if (mover == 1 && (mundo[fantasma.y][fantasma.x+1] !== 2)) { 
+						
+						fantasma.x ++;
+						displayfantasma();
+						mover = Math.floor(Math.random()*4 + 1);
+					} else if (mover == 2 && (mundo[fantasma.y][fantasma.x-1] !== 2)) { 
+						fantasma.x --;
+						displayfantasma();
+						mover = Math.floor(Math.random()*4 + 1);
+					} else if (mover == 3 && (mundo[fantasma.y-1][fantasma.x] !== 2)) { 
+						fantasma.y --;
+						displayfantasma();
+						mover = Math.floor(Math.random()*4 + 1);
+					} else if (mover == 4 && (mundo[fantasma.y+1][fantasma.x] !== 2)) { 
+						displayfantasma();
+						mover = Math.floor(Math.random()*4 + 1);
+					} else{
+						mover = Math.floor(Math.random()*4 + 1);
+					}
+				}, 200)
+			}	
+
+			function moverfantasma2() {			
+				var mover = Math.floor(Math.random()); 
+				setInterval(function () {					
+					if (mover == 1 && (mundo[fantasma2.y][fantasma2.x+1] !== 2)) { 
+						
+						fantasma2.x ++;
+						displayfantasma2();
+						mover = Math.floor(Math.random()*4 + 1);
+					} else if (mover == 2 && (mundo[fantasma2.y][fantasma2.x-1] !== 2)) { 
+						fantasma2.x --;
+						displayfantasma2();
+						mover = Math.floor(Math.random()*4 + 1);
+					} else if (mover == 3 && (mundo[fantasma2.y-1][fantasma2.x] !== 2)) { 
+						fantasma2.y --;
+						displayfantasma2();
+						mover = Math.floor(Math.random()*4 + 1);
+					} else if (mover == 4 && (mundo[fantasma2.y+1][fantasma2.x] !== 2)) { 
+						displayfantasma2();
+						mover = Math.floor(Math.random()*4 + 1);
+					} else{
+						mover = Math.floor(Math.random()*4 + 1);
+					}
+				}, 500)
+			}	
+
+			
+			if ($('#puntajeText').text(puntaje) ===300){
+			setTimeout(function(){ alert("¡¡GANASTE!!!"); }, 400)
+				}
+			if ($('#pacman2puntajeText').text(puntaje2)=== 300){
+				setTimeout(function(){ alert("¡¡GANASTE!!!"); }, 400)
+			}
+								
+			
+			displayfantasma();
+			displayfantasma2();
+			moverfantasma();
+			moverfantasma2();
+			displaymundo();
+			displayPacman();
+			displaypuntaje();
+			setInterval(function(){
+	
+			}, 450)	
+		}); 
+	</script>		
+	</body>
+</html>

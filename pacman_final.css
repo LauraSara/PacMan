@@ -1,0 +1,98 @@
+
+body {
+	background-color:aliceblue;
+	margin: 0px;
+	max-width: 800px;
+	border-right: 7px double gold;
+	
+}
+div.row{	
+	height: 20px;
+	/*font-size: 0;*/
+}
+div.row div {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin: 0px;	
+}
+div.muro {
+	background-image: url(33.jpg);
+	background-repeat: no-repeat;
+	display: inline-block;
+	background-size: cover;
+}
+div.vacio {
+	background-color: aliceblue;
+}
+div#pacman {
+	height: 20px;
+	width: 20px;
+	background: url('PACMAN.gif');	
+	background-size: cover;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
+div#pacman2 {	
+	background: url('paceleste.png');		
+	background-size: contain;
+	position: absolute;
+	height: 20px;
+	width: 20px;
+}
+div.fantasma{
+	background: url('frosado.gif');	
+	height: 20px;
+	width: 20px;
+	background-size: contain;	
+	position: absolute;
+}
+div#fantasma{
+	background: url('frojo.gif');	
+	position: absolute;
+	background-size: contain;	
+	height: 20px;
+	width: 20px;
+}
+
+div.coin {
+	background: url('coin.gif');
+	background-size: 60%;
+	background-repeat: no-repeat;
+}
+div.cereza{
+	background: url('cereza.png');
+	background-repeat: no-repeat;	
+	background-size: contain;
+}
+div.puntajefin{
+	display: inline-block;
+	position: absolute;
+	border: 1px solid tan;
+	width: 150px;
+	margin-top: 100px;
+	margin-left: 600px;
+	margin-right: 40px;
+	background-image: url(33.jpg);
+	font-style: italic;
+	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	padding-left: 10px;
+	border: 5px double gold;
+	color: white;
+}
+div.puntajefin2{
+	display: inline-block;
+	position: absolute;
+	border: 1px solid tan;
+	width: 150px;
+	margin-top: 300px;
+	margin-left: 600px;
+	margin-right: 40px;
+	background-image: url(33.jpg);
+	font-style: italic;
+	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	padding-left: 10px;
+	border: 5px double gold;
+	color: white;
+}
